@@ -632,7 +632,7 @@ function importAll(e){var f=e.target.files[0];if(!f)return;var r=new FileReader(
 // ===== NAV =====
 var PGS=['lists','create','view','practice','text','repeat','allwords'];
 function nav(p){PGS.forEach(function(x){document.getElementById('pg-'+x).classList.remove('on');});document.getElementById('pg-'+p).classList.add('on');['nb-lists','nb-create','nb-allwords'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('on');});if(p==='lists'){document.getElementById('nb-lists').classList.add('on');renderLists();}else if(p==='create')document.getElementById('nb-create').classList.add('on');else if(p==='allwords'){document.getElementById('nb-allwords').classList.add('on');renderAllWords();}else if(p==='practice'){resetPS();renderHard();}else if(p==='view')renderWords();}
-function leaveView(){if(dirty){exportAll(1);toast('✓ Gespeichert');}dirty=false;nav('lists');}
+function leaveView(){if(dirty){sv();toast('✓ Gespeichert');}dirty=false;nav('lists');}
 function goCreate(){editId=null;document.getElementById('create-h').textContent='Neue Liste';document.getElementById('ln-name').value='';document.getElementById('ln-max').value='30';nav('create');}
 function updateRepeatBtn(){var n=countWeighted();var btn=document.getElementById('nb-repeat');if(n>0){btn.style.display='';btn.textContent='↺ Wiederholen ('+n+')';}else btn.style.display='none';}
 
@@ -660,9 +660,10 @@ function renderLists(){
   lists.slice().reverse().forEach(function(l){
     var hc=(l.hard||[]).length,ht=l.text&&l.text.trim(),prog=l.max>0?Math.round(l.words.length/l.max*100):0;
     var rw=l.words.filter(function(w,i){return getW(l,i)>=W_THRESHOLD;}).length;
-    html+='<div class="card" style="padding:.875rem 1rem"><div class="fxb" style="margin-bottom:7px"><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:var(--fs-word);color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(l.name)+'</div>';
-    html+='<div class="fxc" style="margin-top:4px;gap:6px"><span style="font-size:var(--fs-sm);color:var(--text3)">'+l.words.length+'/'+l.max+' Wörter</span>'+(ht?'<span class="badge badge-gray">📄</span>':'')+(hc?'<span class="badge badge-amber">★ '+hc+'</span>':'')+(rw?'<span class="badge badge-red">⚡ '+rw+'</span>':'')+'</div></div>';
-    html+='<div class="fx" style="gap:5px"><button class="btn btn-sm" onclick="openList(\''+l.id+'\')">Ansehen</button><button class="btn btn-sm btn-fill" onclick="openPractice(\''+l.id+'\')">Üben</button><button class="btn btn-sm" onclick="openText(\''+l.id+'\')">📄</button><button class="btn btn-sm" onclick="editList(\''+l.id+'\')">✏</button><button class="btn btn-sm btn-red" onclick="delList(\''+l.id+'\')">✕</button></div></div>';
+    html+='<div class="card" style="padding:1rem">';
+    html+='<div style="font-weight:600;font-size:var(--fs-word);color:#f0f0f0;margin-bottom:5px;word-break:break-word">'+esc(l.name)+'</div>';
+    html+='<div class="fxc" style="margin-bottom:12px;gap:6px"><span style="font-size:var(--fs-sm);color:var(--text3)">'+l.words.length+'/'+l.max+' Wörter</span>'+(ht?'<span class="badge badge-gray">📄</span>':'')+(hc?'<span class="badge badge-amber">★ '+hc+'</span>':'')+(rw?'<span class="badge badge-red">⚡ '+rw+'</span>':'')+'</div>';
+    html+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-sm btn-fill" style="flex:1;min-width:80px" onclick="openList(\''+l.id+'\')">Ansehen</button><button class="btn btn-sm btn-fill" style="flex:1;min-width:80px" onclick="openPractice(\''+l.id+'\')">Üben</button><button class="btn btn-sm" onclick="openText(\''+l.id+'\')">📄</button><button class="btn btn-sm" onclick="editList(\''+l.id+'\')">✏</button><button class="btn btn-sm btn-red" onclick="delList(\''+l.id+'\')">✕</button></div>';
     html+='<div style="height:2px;background:var(--surface3);border-radius:1px;overflow:hidden"><div style="height:100%;width:'+prog+'%;background:var(--border3)"></div></div></div>';
   });
   c.innerHTML=html;
