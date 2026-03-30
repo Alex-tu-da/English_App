@@ -1,0 +1,743 @@
+
+<style>
+html,body{background:#000!important;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#000;--surface:#0d0d0d;--surface2:#141414;--surface3:#1a1a1a;
+  --border:#252525;--border2:#303030;--border3:#404040;
+  --text:#e4e4e4;--text2:#a0a0a0;--text3:#606060;
+  --green:#4ade80;--green-bg:#0a1f12;--green-border:#163825;
+  --red:#f87171;--red-bg:#1f0a0a;--red-border:#381616;
+  --amber:#f0c060;--amber-bg:#1a1208;--amber-border:#3a2a10;
+  --blue:#7ec8e3;--blue-bg:#0a1820;--blue-border:#1a3040;
+  --purple:#c084fc;--purple-bg:#1a0a2a;--purple-border:#3a1a5a;
+  --font:system-ui,sans-serif;
+  --fs-base:15px;--fs-sm:13px;--fs-xs:11px;
+  --fs-word:17px;--fs-trans:15px;--fs-big:2.8rem;--fs-med:1.6rem;
+  --r:8px;--r2:12px;
+}
+body{font-family:var(--font);font-size:var(--fs-base);color:var(--text);background:var(--bg);line-height:1.5}
+.app{max-width:760px;margin:0 auto;padding:1.25rem 1rem;min-height:100vh}
+.nav{display:flex;gap:6px;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border);align-items:center;flex-wrap:wrap}
+.nb{padding:5px 13px;border:0.5px solid var(--border2);border-radius:var(--r);background:transparent;color:var(--text2);cursor:pointer;font-size:var(--fs-sm);font-family:var(--font)}
+.nb:hover{color:var(--text);border-color:var(--border3)}
+.nb.on{background:var(--surface3);border-color:var(--border3);color:var(--text);font-weight:500}
+.nb-repeat{color:var(--purple);border-color:var(--purple-border);background:var(--purple-bg)}
+.nb-repeat:hover{background:#220a38;border-color:var(--purple)}
+.pg{display:none}.pg.on{display:block}
+h2{font-size:18px;font-weight:500;color:var(--text);margin-bottom:1rem}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r2);padding:.875rem 1.1rem;margin-bottom:10px}
+.btn{padding:6px 14px;border:0.5px solid var(--border2);border-radius:var(--r);background:transparent;color:var(--text);cursor:pointer;font-size:var(--fs-sm);font-family:var(--font)}
+.btn:hover{background:var(--surface3);border-color:var(--border3)}
+.btn-fill{background:var(--surface2);border-color:var(--border3)}.btn-fill:hover{background:var(--surface3)}
+.btn-sm{padding:4px 10px;font-size:var(--fs-sm)}
+.btn-xs{padding:2px 8px;font-size:var(--fs-xs)}
+.btn-red{color:var(--red);border-color:var(--red-border)}.btn-red:hover{background:var(--red-bg)}
+.btn-green{color:var(--green);border-color:var(--green-border)}.btn-green:hover{background:var(--green-bg)}
+.btn-amber{color:var(--amber);border-color:var(--amber-border)}.btn-amber:hover{background:var(--amber-bg)}
+.btn-blue{color:var(--blue);border-color:var(--blue-border)}.btn-blue:hover{background:var(--blue-bg)}
+.btn-purple{color:var(--purple);border-color:var(--purple-border);background:var(--purple-bg)}.btn-purple:hover{background:#220a38}
+input[type=text],input[type=number],textarea,select{width:100%;padding:8px 12px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--surface2);color:var(--text);font-size:var(--fs-base);font-family:var(--font)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--border3)}
+input::placeholder,textarea::placeholder{color:var(--text3)}
+textarea{resize:vertical;line-height:1.6}
+.lbl{font-size:var(--fs-sm);color:var(--text2);display:block;margin-bottom:5px}
+.row{margin-bottom:13px}.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.fx{display:flex;gap:8px;flex-wrap:wrap}
+.fxb{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.fxc{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.weight-bar{height:3px;border-radius:2px;margin-top:5px;background:var(--surface3);overflow:hidden}
+.weight-fill{height:100%;border-radius:2px;transition:width .3s}
+.weight-badge{display:inline-flex;align-items:center;gap:4px;font-size:var(--fs-xs);padding:2px 7px;border-radius:4px;font-style:normal;vertical-align:middle;margin-left:6px}
+.wb-0{background:var(--surface3);color:var(--text3);border:0.5px solid var(--border2)}
+.wb-1{background:#181208;color:#c0a050;border:0.5px solid #3a2a10}
+.wb-2{background:#201008;color:#d07030;border:0.5px solid #4a2010}
+.wb-3{background:#221008;color:#e06030;border:0.5px solid #5a1a10}
+.wb-4{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border)}
+.wcard{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r2);padding:.875rem 1rem;margin-bottom:8px}
+.wen{font-weight:500;font-size:var(--fs-word);color:#f0f0f0}
+.wde{color:var(--text2);font-size:var(--fs-trans);margin-top:3px}
+.wex{font-size:var(--fs-sm);color:var(--text3);font-style:italic;margin-top:4px}
+.hard-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);margin-left:7px;vertical-align:middle}
+.badge{display:inline-block;font-size:var(--fs-xs);padding:2px 8px;border-radius:4px;font-weight:500;font-style:normal;line-height:1.5;vertical-align:middle}
+.badge-gray{background:var(--surface3);color:var(--text2);border:0.5px solid var(--border2)}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border)}
+.badge-red{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border)}
+.badge-purple{background:var(--purple-bg);color:var(--purple);border:0.5px solid var(--purple-border)}
+.w-editor{display:flex;align-items:center;gap:5px;margin-top:5px}
+.w-btn{width:24px;height:24px;border:0.5px solid var(--border2);border-radius:5px;background:var(--surface2);color:var(--text2);cursor:pointer;font-size:14px;font-family:var(--font);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+.w-btn:hover{background:var(--surface3);border-color:var(--border3)}
+.w-val{font-size:var(--fs-xs);min-width:18px;text-align:center;color:var(--text2)}
+.toggle{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--surface2);border-radius:var(--r);cursor:pointer;user-select:none;margin-bottom:8px}
+.toggle input[type=checkbox]{width:15px;height:15px;accent-color:var(--text2);cursor:pointer;flex-shrink:0}
+.toggle span{font-size:var(--fs-sm);color:var(--text2)}
+.mode-btn{flex:1;min-width:110px;padding:10px 8px;border:0.5px solid var(--border2);border-radius:var(--r);background:transparent;color:var(--text3);cursor:pointer;font-size:var(--fs-sm);text-align:center;font-family:var(--font)}
+.mode-btn:hover{background:var(--surface2);color:var(--text)}
+.mode-btn.on{border-color:var(--border3);color:var(--text);font-weight:500;background:var(--surface3)}
+.mode-btn .sub{font-size:var(--fs-xs);display:block;margin-top:3px;color:var(--text3)}
+.mode-btn.on .sub{color:var(--text2)}
+.pbar{height:2px;background:var(--surface3);border-radius:1px;margin-bottom:1.25rem;overflow:hidden}
+.pfill{height:100%;background:var(--text2);transition:width .3s}
+.lcard{text-align:center;padding:2.25rem 1.5rem}
+.lbadges{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:1.1rem;min-height:26px;flex-wrap:wrap}
+.lword{font-size:var(--fs-big);font-weight:500;color:#fff;margin:0 0 .4rem;letter-spacing:-.02em}
+.ltrans{font-size:var(--fs-med);color:var(--text2);margin:0 0 .75rem}
+.lex{text-align:left;border-top:0.5px solid var(--border);padding-top:1rem;margin-top:.75rem}
+.lex-lbl{font-size:var(--fs-sm);color:var(--text2);margin-bottom:6px}
+.lex-line{font-size:var(--fs-base);color:var(--text3);font-style:italic;margin-top:5px;line-height:1.6}
+.mark-hard-btn{padding:6px 14px;border:0.5px solid var(--amber-border);border-radius:var(--r);background:var(--amber-bg);color:var(--amber);cursor:pointer;font-size:var(--fs-sm);font-family:var(--font)}
+.mark-hard-btn.off{background:var(--surface2);border-color:var(--border2);color:var(--text3)}.mark-hard-btn.off:hover{border-color:var(--amber-border);color:var(--amber)}
+.peek-btn{padding:6px 14px;border:0.5px solid var(--border2);border-radius:var(--r);background:var(--surface2);color:var(--text2);cursor:pointer;font-size:var(--fs-sm);font-family:var(--font)}
+.peek-btn:hover{background:var(--surface3)}
+.qword{font-size:var(--fs-big);font-weight:500;color:#fff;margin:.75rem 0 1rem;letter-spacing:-.02em}
+.qhint{font-size:var(--fs-sm);color:var(--text3);margin-bottom:.25rem}
+.qinput-wrap{max-width:300px;margin:0 auto .875rem}
+.qfb{font-size:var(--fs-base);padding:.55rem 1.1rem;border-radius:var(--r);margin:.5rem auto;max-width:420px;text-align:center}
+.qfb.ok{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border)}
+.qfb.bad{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border)}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.match-col{display:flex;flex-direction:column;gap:7px}
+.mcol-lbl{font-size:var(--fs-xs);color:var(--text3);text-align:center;margin-bottom:2px;font-weight:500;letter-spacing:.04em}
+.mitem{padding:12px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--surface);cursor:pointer;font-size:var(--fs-base);color:var(--text);text-align:center;transition:border-color .12s,background .12s,color .12s;user-select:none;min-height:50px;display:flex;align-items:center;justify-content:center;line-height:1.3}
+.mitem:hover:not(.ok):not(.bad){border-color:var(--border3);background:var(--surface2)}
+.mitem.sel{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
+.mitem.ok{border-color:var(--green);background:var(--green-bg);color:var(--green);cursor:default;pointer-events:none}
+.mitem.bad{border-color:var(--red);background:var(--red-bg);color:var(--red);animation:sh .3s}
+@keyframes sh{0%,100%{transform:translateX(0)}30%{transform:translateX(-5px)}70%{transform:translateX(5px)}}
+.mstatus{text-align:center;font-size:var(--fs-sm);color:var(--text2);margin-bottom:.75rem}
+.mstatus span{margin:0 10px}.mscore-ok{color:var(--green)}.mscore-bad{color:var(--red)}
+.mmsg{text-align:center;font-size:var(--fs-sm);color:var(--text3);min-height:20px;margin-bottom:.75rem}
+.result-card{text-align:center;padding:2.5rem 1.5rem}
+.result-big{font-size:1.9rem;font-weight:500;color:#fff;margin:.5rem 0}
+.hard-section{background:var(--amber-bg);border:0.5px solid var(--amber-border);border-radius:var(--r2);padding:.875rem 1rem;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;background:#251a08;border:0.5px solid var(--amber-border);border-radius:5px;padding:3px 9px;margin:3px;font-size:var(--fs-sm);color:var(--amber)}
+.chip button{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0}.chip button:hover{color:var(--red)}
+.empty{text-align:center;padding:3rem;color:var(--text3);font-size:var(--fs-base)}
+.toast{position:fixed;bottom:1.25rem;right:1.25rem;background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border);border-radius:var(--r);padding:7px 15px;font-size:var(--fs-sm);font-family:var(--font);opacity:0;transition:opacity .25s;pointer-events:none;z-index:999}
+.text-content{font-size:var(--fs-base);line-height:1.9;color:var(--text)}.text-content p{margin-bottom:.9rem}.text-content strong{color:#fff}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:0.5px solid var(--border);gap:12px;flex-wrap:wrap}
+.srow:last-child{border-bottom:none}
+.slbl{font-size:var(--fs-base);color:var(--text);font-weight:500}
+.sdesc{font-size:var(--fs-sm);color:var(--text3);margin-top:2px}
+.fprev{font-size:18px;color:var(--text);margin-top:8px;padding:10px 12px;background:var(--surface2);border-radius:var(--r);border:0.5px solid var(--border2)}
+.sec-div{font-size:var(--fs-xs);font-weight:500;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin:1.25rem 0 .625rem;padding-bottom:6px;border-bottom:0.5px solid var(--border)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat-box{background:var(--surface2);border-radius:var(--r);padding:.875rem;text-align:center}
+.stat-num{font-size:1.5rem;font-weight:500;color:var(--text)}
+.stat-lbl{font-size:var(--fs-xs);color:var(--text3);margin-top:3px}
+.rp-word-row{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r2);padding:.75rem 1rem;margin-bottom:7px}
+.rp-rank{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--surface3);font-size:var(--fs-xs);font-weight:500;color:var(--text2);flex-shrink:0}
+.dup-warn{background:#1a1208;border:0.5px solid var(--amber-border);border-radius:var(--r2);padding:.875rem 1rem;margin-bottom:10px}
+.rp-mode-card{border:0.5px solid var(--purple-border);border-radius:var(--r2);padding:.875rem 1rem;cursor:pointer;transition:background .12s;margin-bottom:8px;background:transparent}
+.rp-mode-card:hover{background:var(--surface2)}
+.rp-mode-card.on{background:var(--purple-bg);border-color:var(--purple)}
+.rp-mode-title{font-size:var(--fs-sm);font-weight:500;color:var(--purple)}
+.rp-mode-desc{font-size:var(--fs-xs);color:var(--text2);margin-top:3px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r2);width:min(520px,95vw);max-height:85vh;overflow-y:auto;padding:1.25rem;position:relative}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.modal-close{background:none;border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text2);cursor:pointer;font-size:18px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:var(--font)}
+.modal-close:hover{background:var(--surface2);color:var(--text)}
+.aw-row{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-bottom:0.5px solid var(--border);gap:8px}
+.aw-row:last-child{border-bottom:none}
+.aw-row:hover{background:var(--surface2)}
+.aw-en{font-size:var(--fs-sm);color:#f0f0f0;font-weight:500;flex:1;min-width:0}
+.aw-de{font-size:var(--fs-sm);color:var(--text2);flex:1;min-width:0;text-align:right}
+.aw-list{font-size:var(--fs-xs);color:var(--text3);margin-left:8px;white-space:nowrap}
+.aw-search{margin-bottom:10px}
+.kbd-hint{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:.5rem;opacity:.5;font-size:var(--fs-xs);color:var(--text3)}
+.kbd{display:inline-flex;align-items:center;justify-content:center;border:0.5px solid var(--border2);border-radius:4px;background:var(--surface2);padding:2px 7px;font-size:var(--fs-xs);color:var(--text2)}
+.version-badge{font-size:var(--fs-xs);color:var(--text3);margin-left:8px}
+.fs-small{--fs-base:13px;--fs-sm:12px;--fs-xs:10px;--fs-word:15px;--fs-trans:13px;--fs-big:2.4rem;--fs-med:1.4rem}
+.fs-normal{--fs-base:15px;--fs-sm:13px;--fs-xs:11px;--fs-word:17px;--fs-trans:15px;--fs-big:2.8rem;--fs-med:1.6rem}
+.fs-large{--fs-base:17px;--fs-sm:15px;--fs-xs:12px;--fs-word:19px;--fs-trans:17px;--fs-big:3.2rem;--fs-med:1.85rem}
+.fs-xlarge{--fs-base:20px;--fs-sm:17px;--fs-xs:13px;--fs-word:22px;--fs-trans:20px;--fs-big:3.6rem;--fs-med:2.1rem}
+</style>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settings-modal" onclick="if(event.target===this)closeSettings()">
+  <div class="modal">
+    <div class="modal-head">
+      <div><span style="font-weight:500;font-size:var(--fs-word)">Einstellungen</span><span class="version-badge">v<span id="modal-version"></span></span></div>
+      <button class="modal-close" onclick="closeSettings()">✕</button>
+    </div>
+    <div class="sec-div" style="margin-top:0">Schrift</div>
+    <div class="card" style="margin-bottom:8px">
+      <div class="srow">
+        <div><div class="slbl">Schriftgröße</div></div>
+        <div class="fx" style="gap:5px">
+          <button class="btn btn-sm" id="fsz-s" onclick="setFsz('small')">Klein</button>
+          <button class="btn btn-sm btn-fill" id="fsz-n" onclick="setFsz('normal')">Normal</button>
+          <button class="btn btn-sm" id="fsz-l" onclick="setFsz('large')">Groß</button>
+          <button class="btn btn-sm" id="fsz-xl" onclick="setFsz('xlarge')">Sehr groß</button>
+        </div>
+      </div>
+      <div class="srow">
+        <div><div class="slbl">Schriftart</div></div>
+        <select id="fnt" onchange="applyFont(this.value)" style="width:160px">
+          <option value="system-ui,sans-serif">System Standard</option>
+          <option value="Georgia,serif">Georgia</option>
+          <option value="Arial,sans-serif">Arial</option>
+          <option value="Verdana,sans-serif">Verdana</option>
+        </select>
+      </div>
+      <div class="srow">
+        <div><div class="slbl">Textfarbe</div></div>
+        <div class="fx" style="gap:5px">
+          <button class="btn btn-sm" onclick="applyCol('#e4e4e4')" style="background:#e4e4e4;color:#000;border-color:#e4e4e4">Weiß</button>
+          <button class="btn btn-sm" onclick="applyCol('#d4b896')" style="background:#d4b896;color:#000;border-color:#d4b896">Warm</button>
+          <button class="btn btn-sm" onclick="applyCol('#7ec8e3')" style="background:#7ec8e3;color:#000;border-color:#7ec8e3">Blau</button>
+          <button class="btn btn-sm" onclick="applyCol('#a8e6a3')" style="background:#a8e6a3;color:#000;border-color:#a8e6a3">Grün</button>
+          <button class="btn btn-sm" onclick="applyCol('#f0c060')" style="background:#f0c060;color:#000;border-color:#f0c060">Gold</button>
+        </div>
+      </div>
+      <div class="srow" style="border-bottom:none;padding-bottom:0"><div><div class="slbl">Vorschau</div></div></div>
+      <div class="fprev" id="fprev">The quick brown fox — Das schnelle Wort springt.</div>
+    </div>
+    <div class="sec-div">Gewichte</div>
+    <div class="card" style="margin-bottom:8px">
+      <div class="srow" style="border-bottom:none">
+        <div><div class="slbl">Alle Gewichte zurücksetzen</div><div class="sdesc">Setzt alle ⚡-Gewichte auf 0</div></div>
+        <button class="btn btn-sm btn-red" onclick="resetAllWeights()">Zurücksetzen</button>
+      </div>
+    </div>
+    <div class="sec-div">Daten</div>
+    <div class="card" style="margin-bottom:8px">
+      <div class="srow">
+        <div><div class="slbl">Exportieren</div><div class="sdesc">Words/Words.json</div></div>
+        <button class="btn btn-sm btn-green" onclick="exportAll()">↓ Exportieren</button>
+      </div>
+      <div class="srow" style="border-bottom:none">
+        <div><div class="slbl">Importieren</div></div>
+        <div><input type="file" id="imp-file" accept=".json" style="display:none;width:auto" onchange="importAll(event)"><button class="btn btn-sm btn-fill" onclick="document.getElementById('imp-file').click()">↑ Importieren</button></div>
+      </div>
+    </div>
+    <div id="imp-status" style="display:none;margin-top:8px;padding:9px 13px;border-radius:var(--r);font-size:var(--fs-sm)"></div>
+    <div style="margin-top:8px"><button class="btn btn-sm btn-red" onclick="resetSets()">Einstellungen zurücksetzen</button></div>
+  </div>
+</div>
+
+<div style="background:#000;min-height:100vh">
+<div class="app fs-normal" id="main-app">
+
+<div class="nav">
+  <button class="nb on" id="nb-lists" onclick="nav('lists')">Listen</button>
+  <button class="nb" id="nb-create" onclick="goCreate()">+ Erstellen</button>
+  <button class="nb" id="nb-allwords" onclick="nav('allwords')">📋 Alle Wörter</button>
+  <button class="nb nb-repeat" id="nb-repeat" onclick="openRepeat()" style="display:none">↺ Wiederholen</button>
+  <div style="flex:1"></div>
+  <button class="nb" onclick="openSettings()">Einstellungen</button>
+</div>
+
+<div id="pg-lists" class="pg on"><div id="lists-out"></div></div>
+
+<div id="pg-allwords" class="pg">
+  <div class="fxb" style="margin-bottom:1rem">
+    <h2 style="margin:0">📋 Alle Wörter</h2>
+    <span style="font-size:var(--fs-sm);color:var(--text3)" id="aw-count"></span>
+  </div>
+  <div class="aw-search"><input type="text" id="aw-search-inp" placeholder="Suchen..." oninput="renderAllWords()"></div>
+  <div class="card" style="padding:0;overflow:hidden"><div id="aw-list"></div></div>
+</div>
+
+<div id="pg-create" class="pg">
+  <h2 id="create-h">Neue Liste</h2>
+  <div class="card">
+    <div class="row"><label class="lbl">Name</label><input type="text" id="ln-name" placeholder="z.B. Englisch B2"></div>
+    <div class="row"><label class="lbl">Max. Wörter</label><input type="number" id="ln-max" value="30" min="1" max="500" style="width:130px"></div>
+    <div class="fx"><button class="btn btn-fill" onclick="saveList()">Speichern</button><button class="btn" onclick="nav('lists')">Abbrechen</button></div>
+  </div>
+</div>
+
+<div id="pg-view" class="pg">
+  <div class="fxb" style="margin-bottom:1rem">
+    <div><h2 id="view-h" style="margin:0;display:inline"></h2><span class="version-badge" id="view-version"></span></div>
+    <div class="fx">
+      <button class="btn btn-sm" onclick="toggleAdd()">+ Wort</button>
+      <button class="btn btn-sm" onclick="leaveView()">← Zurück</button>
+    </div>
+  </div>
+  <div id="add-form" style="display:none" class="card">
+    <div class="g2" style="margin-bottom:8px">
+      <div><label class="lbl">Englisch</label><input type="text" id="wen" placeholder="e.g. resilient"></div>
+      <div><label class="lbl">Deutsch</label><input type="text" id="wde" placeholder="widerstandsfähig / robust"></div>
+    </div>
+    <div class="row"><label class="lbl">Beispiel 1</label><textarea id="ex1" style="min-height:44px"></textarea></div>
+    <div class="row"><label class="lbl">Beispiel 2</label><textarea id="ex2" style="min-height:44px"></textarea></div>
+    <div style="font-size:var(--fs-xs);color:var(--text3);margin-bottom:10px">Mehrere Übersetzungen mit " / " trennen</div>
+    <div class="fx"><button class="btn btn-fill" onclick="addWord()">Wort hinzufügen</button><button class="btn" onclick="toggleAdd()">Abbrechen</button></div>
+  </div>
+  <div id="edit-form" style="display:none" class="card">
+    <div style="font-size:var(--fs-sm);color:var(--text2);margin-bottom:10px;font-weight:500">Wort bearbeiten</div>
+    <div class="g2" style="margin-bottom:8px">
+      <div><label class="lbl">Englisch</label><input type="text" id="een"></div>
+      <div><label class="lbl">Deutsch</label><input type="text" id="ede"></div>
+    </div>
+    <div class="row"><label class="lbl">Beispiel 1</label><textarea id="eex1" style="min-height:44px"></textarea></div>
+    <div class="row"><label class="lbl">Beispiel 2</label><textarea id="eex2" style="min-height:44px"></textarea></div>
+    <div class="fx"><button class="btn btn-fill" onclick="saveEdit()">Speichern</button><button class="btn" onclick="closeEdit()">Abbrechen</button></div>
+  </div>
+  <div id="dup-warn" style="display:none" class="dup-warn">
+    <div style="color:var(--amber);font-weight:500;font-size:var(--fs-sm);margin-bottom:6px">⚠ Englisches Wort bereits vorhanden!</div>
+    <div style="font-size:var(--fs-sm);color:var(--text2)" id="dup-msg"></div>
+    <div style="margin-top:8px" class="fx">
+      <button class="btn btn-sm btn-amber" onclick="confirmDupPenalty()">Gewicht erhöhen</button>
+      <button class="btn btn-sm" onclick="dismissDup()">Schließen</button>
+    </div>
+  </div>
+  <div id="words-out"></div>
+  <div id="words-empty" class="empty" style="display:none">Noch keine Wörter — klicke auf "+ Wort"</div>
+</div>
+
+<div id="pg-text" class="pg">
+  <div class="fxb" style="margin-bottom:1rem">
+    <h2 id="text-h" style="margin:0"></h2>
+    <div class="fx">
+      <button class="btn btn-sm btn-fill" id="text-save-btn" onclick="saveText()" style="display:none">Speichern</button>
+      <button class="btn btn-sm btn-blue" id="text-edit-btn" onclick="startEditText()">Bearbeiten</button>
+      <button class="btn btn-sm" onclick="nav('lists')">← Zurück</button>
+    </div>
+  </div>
+  <div class="card">
+    <div id="text-view" class="text-content" style="display:none"></div>
+    <textarea id="text-input" style="display:none;min-height:200px;line-height:1.8" placeholder="Text zu dieser Liste..."></textarea>
+    <div id="text-empty" style="color:var(--text3);text-align:center;padding:1.5rem 0">Kein Text. Klicke auf "Bearbeiten".</div>
+  </div>
+</div>
+
+<div id="pg-practice" class="pg">
+  <div id="ps-setup">
+    <div class="fxb" style="margin-bottom:1rem"><h2 style="margin:0">Üben</h2><button class="btn btn-sm" onclick="nav('lists')">← Zurück</button></div>
+    <div id="ps-stats" class="stat-row" style="display:none"></div>
+    <div class="sec-div">Lernen</div>
+    <div class="card">
+      <div class="fx" style="margin-bottom:10px">
+        <button class="mode-btn on" id="lm-ende" onclick="setLM('en-de')">EN → DE<span class="sub">Englisch zuerst</span></button>
+        <button class="mode-btn" id="lm-deen" onclick="setLM('de-en')">DE → EN<span class="sub">Deutsch zuerst</span></button>
+      </div>
+      <label class="toggle"><input type="checkbox" id="cb-trans" checked><span>Übersetzung anzeigen</span></label>
+      <label class="toggle"><input type="checkbox" id="cb-rand" checked><span>Zufällige Reihenfolge</span></label>
+      <div class="fx">
+        <button class="btn btn-fill" onclick="startLearn(false)">Alle lernen</button>
+        <button class="btn btn-amber" id="btn-lh" onclick="startLearn(true)" style="display:none">★ Schwierige</button>
+      </div>
+    </div>
+    <div class="sec-div">Abfragen</div>
+    <div class="card">
+      <div class="fx" style="margin-bottom:10px">
+        <button class="mode-btn on" id="qm-ende" onclick="setQM('en-de')">EN → DE<span class="sub">Deutsch eingeben</span></button>
+        <button class="mode-btn" id="qm-deen" onclick="setQM('de-en')">DE → EN<span class="sub">Englisch eingeben</span></button>
+      </div>
+      <div class="fx">
+        <button class="btn btn-fill" onclick="startQuiz(false)">Alle abfragen</button>
+        <button class="btn btn-amber" id="btn-qh" onclick="startQuiz(true)" style="display:none">★ Schwierige</button>
+      </div>
+    </div>
+    <div class="sec-div">Zuordnen</div>
+    <div class="card">
+      <div class="fxb" style="margin-bottom:10px">
+        <label class="lbl" style="margin:0">Paare pro Runde</label>
+        <select id="match-n" style="width:140px"><option value="4" selected>4 Paare</option><option value="6">6 Paare</option><option value="8">8 Paare</option></select>
+      </div>
+      <button class="btn btn-fill" onclick="startMatch()">Zuordnen starten</button>
+    </div>
+    <div id="hard-toggle-wrap" style="margin-top:8px;display:none">
+      <button class="btn btn-sm btn-amber" id="hard-toggle-btn" onclick="toggleHardSec()">★ Schwierige Wörter</button>
+    </div>
+    <div id="hard-sec" class="hard-section" style="display:none;margin-top:8px">
+      <div class="fxb" style="margin-bottom:8px">
+        <span style="font-size:var(--fs-sm);font-weight:500;color:var(--amber)">★ Schwierige Wörter</span>
+        <button class="btn btn-xs btn-red" onclick="clearHard()">Alle entfernen</button>
+      </div>
+      <div id="hard-chips"></div>
+    </div>
+  </div>
+  <div id="ps-learn" style="display:none">
+    <div class="fxb" style="margin-bottom:.875rem"><span style="font-size:var(--fs-sm);color:var(--text3)" id="lcount"></span><button class="btn btn-xs btn-red" onclick="abortLearn()">Abbrechen</button></div>
+    <div class="pbar"><div class="pfill" id="lpbar"></div></div>
+    <div class="card lcard">
+      <div class="lbadges"><span class="badge badge-gray" id="lbadge"></span><span id="lhard-ind" class="badge badge-amber" style="display:none">★ schwierig</span><span id="lweight-ind" class="weight-badge wb-0" style="display:none"></span></div>
+      <div class="lword" id="lword"></div>
+      <div class="ltrans" id="ltrans"></div>
+      <div id="lpeek-wrap" style="display:none;margin-bottom:.5rem"><button class="peek-btn" id="lpeek-btn" onclick="peekTrans()">Übersetzung anzeigen</button></div>
+      <div class="lex" id="lex" style="display:none"></div>
+      <div style="margin-top:1rem;border-top:0.5px solid var(--border);padding-top:.875rem"><button class="mark-hard-btn off" id="mhard-btn" onclick="toggleHard()"></button></div>
+    </div>
+    <div class="fx" style="justify-content:center;margin-top:.875rem">
+      <button class="btn" id="lprev" onclick="lPrev()" style="display:none">← Zurück</button>
+      <button class="btn btn-fill" id="lnext" onclick="lNext()">Nächstes →</button>
+      <button class="btn btn-fill" id="lrepeat" onclick="lRepeat()" style="display:none">↺ Wiederholen</button>
+      <button class="btn" id="ldone" onclick="lDone()" style="display:none">Fertig ✓</button>
+    </div>
+    <div class="kbd-hint"><span class="kbd">←</span> zurück <span class="kbd">→</span> weiter</div>
+  </div>
+  <div id="ps-quiz" style="display:none">
+    <div class="fxb" style="margin-bottom:.875rem"><span style="font-size:var(--fs-sm);color:var(--text3)" id="qcount"></span><button class="btn btn-xs btn-red" onclick="abortQuiz()">Abbrechen</button></div>
+    <div class="pbar"><div class="pfill" id="qpbar"></div></div>
+    <div class="card" style="text-align:center;padding:1.75rem 1.5rem">
+      <p class="qhint" id="qhint"></p>
+      <div class="qword" id="qword"></div>
+      <div class="qinput-wrap"><input type="text" id="qans" placeholder="Antwort eingeben..." onkeydown="if(event.key==='Enter')checkAns()"></div>
+      <div id="qfb" style="display:none"></div>
+      <div class="fx" style="justify-content:center;margin-top:.875rem">
+        <button id="qcheck" class="btn btn-fill" onclick="checkAns()">Prüfen</button>
+        <button id="qnext" class="btn" onclick="qNext()" style="display:none">Weiter →</button>
+      </div>
+      <div id="qex" style="display:none;margin-top:1.1rem;text-align:left;border-top:0.5px solid var(--border);padding-top:.875rem">
+        <p style="font-size:var(--fs-sm);color:var(--text2);margin-bottom:4px">Beispiele:</p>
+        <p class="lex-line" id="qex1"></p><p class="lex-line" id="qex2" style="margin-top:4px"></p>
+      </div>
+    </div>
+  </div>
+  <div id="ps-match" style="display:none">
+    <div class="fxb" style="margin-bottom:.75rem"><span style="font-size:var(--fs-sm);color:var(--text3)" id="mround"></span><button class="btn btn-xs btn-red" onclick="abortMatch()">Abbrechen</button></div>
+    <div class="mstatus" id="mstatus"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px"><div class="mcol-lbl">Englisch</div><div class="mcol-lbl">Deutsch</div></div>
+    <div class="match-grid"><div class="match-col" id="mcol-en"></div><div class="match-col" id="mcol-de"></div></div>
+    <div class="mmsg" id="mmsg"></div>
+  </div>
+  <div id="ps-mresult" style="display:none">
+    <div class="card result-card">
+      <div style="font-size:2rem;margin-bottom:.5rem" id="mr-icon"></div>
+      <h2 style="margin-bottom:.25rem">Zuordnung fertig!</h2>
+      <div class="result-big" id="mr-score"></div>
+      <p style="color:var(--text2);font-size:var(--fs-sm);margin-bottom:1.25rem" id="mr-detail"></p>
+      <div class="fx" style="justify-content:center"><button class="btn btn-fill" onclick="startMatch()">Nochmal</button><button class="btn" onclick="resetPS()">Zurück</button></div>
+    </div>
+  </div>
+  <div id="ps-qresult" style="display:none">
+    <div class="card result-card">
+      <div style="font-size:2rem;margin-bottom:.5rem" id="qr-icon"></div>
+      <h2 style="margin-bottom:.25rem">Abfrage fertig!</h2>
+      <div class="result-big" id="qr-score"></div>
+      <p style="color:var(--text2);font-size:var(--fs-sm);margin-bottom:1.25rem" id="qr-detail"></p>
+      <div class="fx" style="justify-content:center"><button class="btn btn-fill" onclick="startQuiz(false)">Nochmal</button><button class="btn" onclick="resetPS()">Zurück</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- REPEAT -->
+<div id="pg-repeat" class="pg">
+  <div id="rp-setup">
+    <div class="fxb" style="margin-bottom:.75rem">
+      <div><h2 style="margin:0">↺ Wiederholen</h2><div style="font-size:var(--fs-sm);color:var(--text2);margin-top:3px" id="rp-setup-sub"></div></div>
+      <button class="btn btn-sm" onclick="nav('lists')">← Zurück</button>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:var(--fs-xs);color:var(--text3);margin-bottom:8px;font-weight:500;letter-spacing:.05em;text-transform:uppercase">Modus wählen</div>
+      <div id="rp-mode-learn" class="rp-mode-card on" onclick="selectRpMode('learn')"><div class="rp-mode-title">📖 Lernen</div><div class="rp-mode-desc">Wörter durchblättern — wie beim normalen Lernen</div></div>
+      <div id="rp-mode-test" class="rp-mode-card" onclick="selectRpMode('test')"><div class="rp-mode-title">✏ Prüfen</div><div class="rp-mode-desc">Übersetzung eingeben — bei richtig sinkt das Gewicht</div></div>
+    </div>
+    <div id="rp-learn-opts" class="card" style="margin-bottom:12px">
+      <div style="font-size:var(--fs-sm);color:var(--text2);margin-bottom:10px;font-weight:500">Optionen für Lernen</div>
+      <div class="fx" style="margin-bottom:10px">
+        <button class="mode-btn on" id="rpl-m-ende" onclick="setRplMode('en-de')">EN → DE<span class="sub">Englisch zuerst</span></button>
+        <button class="mode-btn" id="rpl-m-deen" onclick="setRplMode('de-en')">DE → EN<span class="sub">Deutsch zuerst</span></button>
+      </div>
+      <label class="toggle"><input type="checkbox" id="rpl-cb-trans" checked><span>Übersetzung anzeigen</span></label>
+      <label class="toggle"><input type="checkbox" id="rpl-cb-rand" checked><span>Zufällige Reihenfolge</span></label>
+    </div>
+    <div style="background:var(--purple-bg);border:0.5px solid var(--purple-border);border-radius:var(--r2);padding:.875rem 1rem;margin-bottom:12px">
+      <div class="fxb">
+        <div><div style="font-size:var(--fs-sm);font-weight:500;color:var(--purple)" id="rp-round-title"></div><div style="font-size:var(--fs-xs);color:var(--text2);margin-top:3px" id="rp-round-sub"></div></div>
+        <div class="fx" style="gap:6px">
+          <button class="btn btn-sm" id="rp-prev-btn" onclick="rpChangeRound(-1)" style="display:none">←</button>
+          <button class="btn btn-purple" id="rp-start-btn" onclick="beginRepeat()">Runde starten</button>
+          <button class="btn btn-sm" id="rp-next-btn" onclick="rpChangeRound(1)" style="display:none">→</button>
+        </div>
+      </div>
+    </div>
+    <div id="rp-word-list"></div>
+  </div>
+  <div id="rp-learn-mode" style="display:none">
+    <div class="fxb" style="margin-bottom:.875rem"><span style="font-size:var(--fs-sm);color:var(--text3)" id="rpl-count"></span><button class="btn btn-xs btn-red" onclick="abortRepeat()">Abbrechen</button></div>
+    <div class="pbar"><div class="pfill" id="rpl-pbar"></div></div>
+    <div class="card lcard">
+      <div class="lbadges"><span class="badge badge-gray" id="rpl-badge"></span><span class="badge badge-purple" id="rpl-list-badge"></span><span id="rpl-weight-ind" class="weight-badge wb-1"></span></div>
+      <div class="lword" id="rpl-word"></div>
+      <div class="ltrans" id="rpl-trans"></div>
+      <div id="rpl-peek-wrap" style="display:none;margin-bottom:.5rem"><button class="peek-btn" id="rpl-peek-btn" onclick="rplPeekToggle()">Übersetzung anzeigen</button></div>
+      <div class="lex" id="rpl-ex" style="display:none"></div>
+    </div>
+    <div class="fx" style="justify-content:center;margin-top:.875rem">
+      <button class="btn" id="rpl-prev-btn" onclick="rplPrev()" style="display:none">← Zurück</button>
+      <button class="btn btn-fill" id="rpl-next-btn" onclick="rplNext()">Nächstes →</button>
+      <button class="btn btn-fill" id="rpl-repeat-btn" onclick="rplRepeat()" style="display:none">↺ Nochmal</button>
+      <button class="btn btn-purple" id="rpl-done-btn" onclick="rplDone()" style="display:none">Fertig ✓</button>
+    </div>
+    <div class="kbd-hint"><span class="kbd">←</span> zurück <span class="kbd">→</span> weiter</div>
+  </div>
+  <div id="rp-test" style="display:none">
+    <div class="fxb" style="margin-bottom:.875rem"><span style="font-size:var(--fs-sm);color:var(--text3)" id="rp-count"></span><button class="btn btn-xs btn-red" onclick="abortRepeat()">Abbrechen</button></div>
+    <div class="pbar"><div class="pfill" id="rp-pbar"></div></div>
+    <div class="card" style="text-align:center;padding:2rem 1.5rem">
+      <div class="lbadges"><span class="badge badge-gray">Englisch</span><span class="badge badge-purple" id="rp-list-badge"></span><span id="rp-weight-ind" class="weight-badge wb-1"></span></div>
+      <p style="font-size:var(--fs-sm);color:var(--text3);margin-bottom:.25rem">Deutsche Übersetzung?</p>
+      <div class="qword" id="rp-word"></div>
+      <div class="qinput-wrap"><input type="text" id="rp-ans" placeholder="Übersetzung eingeben..." onkeydown="if(event.key==='Enter')rpCheck()"></div>
+      <div id="rp-fb" style="display:none"></div>
+      <div id="rp-ex" style="display:none;margin-top:1rem;text-align:left;border-top:0.5px solid var(--border);padding-top:.875rem">
+        <p style="font-size:var(--fs-sm);color:var(--text2);margin-bottom:4px">Beispiele:</p>
+        <p class="lex-line" id="rp-ex1"></p><p class="lex-line" id="rp-ex2" style="margin-top:4px"></p>
+      </div>
+    </div>
+    <div class="fx" style="justify-content:center;margin-top:.875rem">
+      <button class="btn btn-fill" id="rp-check-btn" onclick="rpCheck()">Prüfen</button>
+      <button class="btn" id="rp-next-word-btn" onclick="rpNextWord()" style="display:none">Weiter →</button>
+      <button class="btn btn-purple" id="rp-finish-btn" onclick="rpFinish()" style="display:none">Fertig ✓</button>
+    </div>
+  </div>
+  <div id="rp-result" style="display:none">
+    <div class="card result-card">
+      <div style="font-size:2rem;margin-bottom:.5rem" id="rp-result-icon">🎯</div>
+      <h2 style="margin-bottom:.25rem" id="rp-result-title">Runde fertig!</h2>
+      <div class="result-big" id="rp-score"></div>
+      <p style="color:var(--text2);font-size:var(--fs-sm);margin-bottom:1.25rem" id="rp-detail"></p>
+      <div class="fx" style="justify-content:center">
+        <button class="btn btn-purple" onclick="openRepeat()">Nächste Runde</button>
+        <button class="btn" onclick="nav('lists')">Zur Übersicht</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+var APP_VERSION=27;
+var SK='vkb_wA',SETK='vkb_sA';
+var ROUND_SIZE=20;
+var W_THRESHOLD=3,W_DECAY=2,W_WRONG_QUIZ=3,W_DUP=8,W_MATCH_OK=1,W_MATCH_BAD=1;
+
+var lists=[],curId=null,curTextId=null;
+var qWords=[],qIdx=0,qScore=0,qMode='en-de';
+var lWords=[],lIdx=0,lMode='en-de',lTrans=true,lRand=true,lPeekVis=false;
+var editId=null,editWIdx=-1,dirty=false,hardOpen=false;
+var mPool=[],mRound=0,mTotal=0,mOk=0,mErr=0,mN=4;
+var mSelSide=null,mSelIdx=null,mEnI=[],mDeI=[];
+var pendingDupKey=null;
+var rpAllWords=[],rpRounds=[],rpCurrentRound=0;
+var rpQueue=[],rpIdx=0,rpOk=0,rpFail=0,rpMode='learn';
+var rplQueue=[],rplIdx=0,rplMode='en-de',rplTrans=true,rplRand=true,rplPeekVis=false;
+
+// ===== WEIGHT =====
+function getW(l,i){return(l.weights&&l.weights[i])||0;}
+function setW(l,i,v){if(!l.weights)l.weights={};l.weights[i]=Math.max(0,Math.min(30,v));}
+function addW(l,i,d){setW(l,i,getW(l,i)+d);}
+function decayW(l,i,amt){setW(l,i,Math.max(0,getW(l,i)-(amt||W_DECAY)));}
+function wLevel(w){return w<=0?0:w<=4?1:w<=9?2:w<=14?3:4;}
+function wClass(w){return 'wb-'+wLevel(w);}
+function wLabel(w){if(!w)return'';return(w<=4?'⚡':w<=9?'⚡⚡':w<=14?'⚡⚡⚡':'🔥')+' '+w;}
+function wColor(w){var l=wLevel(w);return l<=1?'#a0a060':l==2?'#c0903a':l==3?'#e06030':'#f87171';}
+function countWeighted(){var n=0;lists.forEach(function(l){l.words.forEach(function(w,i){if(getW(l,i)>=W_THRESHOLD)n++;});});return n;}
+function resetAllWeights(){if(!confirm('Alle Gewichte zurücksetzen?'))return;lists.forEach(function(l){l.weights={};});sv();updateRepeatBtn();toast('Alle Gewichte zurückgesetzt');}
+function changeWeight(listId,wordIdx,delta){var l=gl(listId);if(!l)return;setW(l,wordIdx,getW(l,wordIdx)+delta);sv();updateRepeatBtn();dirty=true;renderWords();}
+function checkAnswer(raw,correct){var r=raw.trim().toLowerCase();if(!r)return false;return correct.split('/').map(function(v){return v.trim().toLowerCase();}).filter(Boolean).some(function(v){return v===r;});}
+
+// ===== SETTINGS MODAL =====
+function openSettings(){document.getElementById('settings-modal').classList.add('open');}
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
+
+// ===== STORAGE =====
+function ld(){var r=ls(function(){return localStorage.getItem(SK);})||ls(function(){return top.localStorage.getItem(SK);});if(r){try{lists=JSON.parse(r)||[];}catch(e){lists=[];}}}
+function sv(){var j=JSON.stringify(lists);ls(function(){localStorage.setItem(SK,j);});ls(function(){top.localStorage.setItem(SK,j);});}
+function ldS(){var r=ls(function(){return localStorage.getItem(SETK);})||ls(function(){return top.localStorage.getItem(SETK);});if(!r)return;try{var s=JSON.parse(r);if(s.f){applyFont(s.f,1);document.getElementById('fnt').value=s.f;}if(s.c)applyCol(s.c,1);if(s.z)setFsz(s.z,1);}catch(e){}}
+function svS(){var f=document.getElementById('fnt').value,c=getComputedStyle(document.documentElement).getPropertyValue('--text').trim();ls(function(){localStorage.setItem(SETK,JSON.stringify({f:f,c:c,z:curFsz}));});ls(function(){top.localStorage.setItem(SETK,JSON.stringify({f:f,c:c,z:curFsz}));});}
+
+// ===== UTILS =====
+function nid(){return 'i'+(Date.now()+Math.random()).toString(36);}
+function gl(id){return lists.find(function(l){return l.id===id;})||null;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shuf(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function ls(fn){try{return fn();}catch(e){return null;}}
+function md(t){if(!t)return'';var e=esc(t);e=e.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');var p=e.split(/\n\n+/);return p.length>1?p.map(function(x){return'<p>'+x.replace(/\n/g,'<br>')+'</p>';}).join(''):e.replace(/\n/g,'<br>');}
+function isH(l,i){return l.hard&&l.hard.indexOf(i)>=0;}
+var curFsz='normal';
+function setFsz(sz,silent){curFsz=sz;var app=document.getElementById('main-app');['fs-small','fs-normal','fs-large','fs-xlarge'].forEach(function(c){app.classList.remove(c);});app.classList.add('fs-'+sz);['s','n','l','xl'].forEach(function(k){var b=document.getElementById('fsz-'+k);if(b)b.classList.remove('btn-fill');});var map={small:'s',normal:'n',large:'l',xlarge:'xl'};var ab=document.getElementById('fsz-'+map[sz]);if(ab)ab.classList.add('btn-fill');if(!silent)svS();}
+function applyFont(f,s){document.documentElement.style.setProperty('--font',f);document.getElementById('fprev').style.fontFamily=f;if(!s)svS();}
+function applyCol(c,s){document.documentElement.style.setProperty('--text',c);document.getElementById('fprev').style.color=c;if(!s)svS();}
+function resetSets(){applyFont('system-ui,sans-serif',1);applyCol('#e4e4e4',1);setFsz('normal',1);document.getElementById('fnt').value='system-ui,sans-serif';svS();}
+function toast(m,type){var t=document.getElementById('toast');t.textContent=m;t.style.background=type==='warn'?'var(--amber-bg)':type==='err'?'var(--red-bg)':'var(--green-bg)';t.style.color=type==='warn'?'var(--amber)':type==='err'?'var(--red)':'var(--green)';t.style.border='0.5px solid '+(type==='warn'?'var(--amber-border)':type==='err'?'var(--red-border)':'var(--green-border)');t.style.opacity='1';setTimeout(function(){t.style.opacity='0';},2500);}
+function exportAll(s){if(!lists.length)return;try{var b=new Blob([JSON.stringify({v:1,appVersion:APP_VERSION,d:new Date().toISOString(),lists:lists},null,2)],{type:'application/json'});var u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='Words/Words.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);document.body.removeChild(a);},400);if(!s)toast('✓ Exportiert');}catch(e){}}
+function importAll(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){var st=document.getElementById('imp-status');try{var d=JSON.parse(ev.target.result),imp=d.lists||d;if(!Array.isArray(imp))throw new Error('Ungültiges Format');var c=0;imp.forEach(function(l){if(!l.id||!l.name)return;if(!lists.find(function(x){return x.id===l.id;})){lists.push(l);c++;}});sv();st.style.display='block';st.style.background='var(--green-bg)';st.style.color='var(--green)';st.style.border='0.5px solid var(--green-border)';st.textContent=c+' Listen importiert.';renderLists();updateRepeatBtn();setTimeout(function(){st.style.display='none';},3000);}catch(err){st.style.display='block';st.style.background='var(--red-bg)';st.style.color='var(--red)';st.style.border='0.5px solid var(--red-border)';st.textContent='Fehler: '+err.message;}e.target.value='';};r.readAsText(f);}
+
+// ===== NAV =====
+var PGS=['lists','create','view','practice','text','repeat','allwords'];
+function nav(p){PGS.forEach(function(x){document.getElementById('pg-'+x).classList.remove('on');});document.getElementById('pg-'+p).classList.add('on');['nb-lists','nb-create','nb-allwords'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('on');});if(p==='lists'){document.getElementById('nb-lists').classList.add('on');renderLists();}else if(p==='create')document.getElementById('nb-create').classList.add('on');else if(p==='allwords'){document.getElementById('nb-allwords').classList.add('on');renderAllWords();}else if(p==='practice'){resetPS();renderHard();}else if(p==='view')renderWords();}
+function leaveView(){if(dirty){exportAll(1);toast('✓ Gespeichert');}dirty=false;nav('lists');}
+function goCreate(){editId=null;document.getElementById('create-h').textContent='Neue Liste';document.getElementById('ln-name').value='';document.getElementById('ln-max').value='30';nav('create');}
+function updateRepeatBtn(){var n=countWeighted();var btn=document.getElementById('nb-repeat');if(n>0){btn.style.display='';btn.textContent='↺ Wiederholen ('+n+')';}else btn.style.display='none';}
+
+// ===== ALL WORDS =====
+function renderAllWords(){
+  var q=(document.getElementById('aw-search-inp').value||'').toLowerCase().trim();
+  var all=[];
+  lists.slice().reverse().forEach(function(l){
+    l.words.forEach(function(w){
+      if(!q||w.en.toLowerCase().includes(q)||w.de.toLowerCase().includes(q))
+        all.push({en:w.en,de:w.de,listName:l.name});
+    });
+  });
+  all.sort(function(a,b){return a.en.toLowerCase().localeCompare(b.en.toLowerCase());});
+  document.getElementById('aw-count').textContent=all.length+' Wörter';
+  if(!all.length){document.getElementById('aw-list').innerHTML='<div style="padding:2rem;text-align:center;color:var(--text3)">Keine Wörter gefunden.</div>';return;}
+  document.getElementById('aw-list').innerHTML=all.map(function(w){return'<div class="aw-row"><span class="aw-en">'+esc(w.en)+'</span><span class="aw-de">'+esc(w.de)+'</span><span class="aw-list">'+esc(w.listName)+'</span></div>';}).join('');
+}
+
+// ===== LISTS =====
+function renderLists(){
+  var c=document.getElementById('lists-out');
+  if(!lists.length){c.innerHTML='<div class="empty"><div style="font-size:1.5rem;margin-bottom:.75rem">📚</div><div style="color:var(--text2);margin-bottom:.5rem">Noch keine Wortlisten</div><button class="btn btn-fill" style="margin-top:.75rem" onclick="goCreate()">+ Liste erstellen</button></div>';return;}
+  var html='<h2>Meine Wortlisten</h2>';
+  lists.slice().reverse().forEach(function(l){
+    var hc=(l.hard||[]).length,ht=l.text&&l.text.trim(),prog=l.max>0?Math.round(l.words.length/l.max*100):0;
+    var rw=l.words.filter(function(w,i){return getW(l,i)>=W_THRESHOLD;}).length;
+    html+='<div class="card" style="padding:.875rem 1rem"><div class="fxb" style="margin-bottom:7px"><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:var(--fs-word);color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(l.name)+'</div>';
+    html+='<div class="fxc" style="margin-top:4px;gap:6px"><span style="font-size:var(--fs-sm);color:var(--text3)">'+l.words.length+'/'+l.max+' Wörter</span>'+(ht?'<span class="badge badge-gray">📄</span>':'')+(hc?'<span class="badge badge-amber">★ '+hc+'</span>':'')+(rw?'<span class="badge badge-red">⚡ '+rw+'</span>':'')+'</div></div>';
+    html+='<div class="fx" style="gap:5px"><button class="btn btn-sm" onclick="openList(\''+l.id+'\')">Ansehen</button><button class="btn btn-sm btn-fill" onclick="openPractice(\''+l.id+'\')">Üben</button><button class="btn btn-sm" onclick="openText(\''+l.id+'\')">📄</button><button class="btn btn-sm" onclick="editList(\''+l.id+'\')">✏</button><button class="btn btn-sm btn-red" onclick="delList(\''+l.id+'\')">✕</button></div></div>';
+    html+='<div style="height:2px;background:var(--surface3);border-radius:1px;overflow:hidden"><div style="height:100%;width:'+prog+'%;background:var(--border3)"></div></div></div>';
+  });
+  c.innerHTML=html;
+}
+function saveList(){var n=document.getElementById('ln-name').value.trim(),m=parseInt(document.getElementById('ln-max').value)||30;if(!n){alert('Bitte Namen eingeben.');return;}if(editId){var l=gl(editId);if(l){l.name=n;l.max=m;}editId=null;}else lists.push({id:nid(),name:n,max:m,words:[],text:'',hard:[],weights:{}});sv();nav('lists');}
+function editList(id){var l=gl(id);if(!l)return;editId=id;document.getElementById('create-h').textContent='Liste bearbeiten';document.getElementById('ln-name').value=l.name;document.getElementById('ln-max').value=l.max;nav('create');}
+function delList(id){if(!confirm('Liste wirklich löschen?'))return;lists=lists.filter(function(l){return l.id!==id;});if(curId===id)curId=null;sv();updateRepeatBtn();renderLists();}
+function openList(id){curId=id;dirty=false;document.getElementById('add-form').style.display='none';document.getElementById('edit-form').style.display='none';document.getElementById('dup-warn').style.display='none';pendingDupKey=null;clearForms();nav('view');}
+function openPractice(id){curId=id;nav('practice');}
+function openText(id){curTextId=id;var l=gl(id);if(!l)return;document.getElementById('text-h').textContent=l.name;renderTextPg(l);nav('text');}
+function renderTextPg(l){var t=l.text||'',v=document.getElementById('text-view'),inp=document.getElementById('text-input'),emp=document.getElementById('text-empty'),eb=document.getElementById('text-edit-btn'),sb=document.getElementById('text-save-btn');if(t){v.innerHTML=md(t);v.style.display='block';inp.style.display='none';emp.style.display='none';eb.style.display='';sb.style.display='none';}else{v.style.display='none';inp.style.display='none';emp.style.display='block';eb.style.display='';sb.style.display='none';}}
+function startEditText(){var l=gl(curTextId);if(!l)return;var inp=document.getElementById('text-input');inp.value=l.text||'';document.getElementById('text-view').style.display='none';document.getElementById('text-empty').style.display='none';inp.style.display='block';document.getElementById('text-save-btn').style.display='';document.getElementById('text-edit-btn').style.display='none';inp.focus();}
+function saveText(){var l=gl(curTextId);if(!l)return;var nv=document.getElementById('text-input').value.trim();if(nv!==l.text){l.text=nv;sv();}renderTextPg(l);}
+
+// ===== WORDS =====
+function toggleAdd(){var f=document.getElementById('add-form');if(f.style.display==='none'){var l=gl(curId);if(l&&l.words.length>=l.max){alert('Max. Wortanzahl erreicht.');return;}document.getElementById('edit-form').style.display='none';document.getElementById('dup-warn').style.display='none';f.style.display='block';document.getElementById('wen').focus();}else{f.style.display='none';clearForms();}}
+function clearForms(){['wen','wde','ex1','ex2'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});}
+
+// ===== FIX: nur englisches Wort prüfen =====
+function findDuplicate(en){
+  var en2=en.toLowerCase().trim(), found=null;
+  lists.forEach(function(l){
+    l.words.forEach(function(w,i){
+      // NUR englisches Wort vergleichen — deutsche Übersetzung wird ignoriert
+      if(!found && w.en.toLowerCase().trim()===en2)
+        found={list:l,idx:i,word:w};
+    });
+  });
+  return found;
+}
+
+function confirmDupPenalty(){if(!pendingDupKey)return;var l=gl(pendingDupKey.listId);if(l){addW(l,pendingDupKey.wordIdx,W_DUP);sv();updateRepeatBtn();toast('Gewicht +'+W_DUP,'warn');}dismissDup();['wen','wde','ex1','ex2'].forEach(function(id){document.getElementById(id).value='';}); }
+function dismissDup(){document.getElementById('dup-warn').style.display='none';pendingDupKey=null;}
+
+function addWord(){
+  var en=document.getElementById('wen').value.trim(),de=document.getElementById('wde').value.trim();
+  if(!en||!de){alert('Englisch und Übersetzung eingeben.');return;}
+  // nur englisches Wort auf Duplikat prüfen
+  var dup=findDuplicate(en);
+  if(dup){
+    pendingDupKey={listId:dup.list.id,wordIdx:dup.idx};
+    document.getElementById('dup-msg').textContent='"'+dup.word.en+'" existiert bereits in "'+dup.list.name+'". Gewicht +'+W_DUP;
+    document.getElementById('dup-warn').style.display='block';
+    document.getElementById('add-form').style.display='none';
+    return;
+  }
+  var l=gl(curId);if(!l)return;
+  l.words.push({en:en,de:de,e1:document.getElementById('ex1').value.trim(),e2:document.getElementById('ex2').value.trim()});
+  sv();dirty=true;clearForms();document.getElementById('add-form').style.display='none';renderWords();updateRepeatBtn();
+}
+function openEdit(idx){var l=gl(curId);if(!l||!l.words[idx])return;editWIdx=idx;var w=l.words[idx];document.getElementById('een').value=w.en||'';document.getElementById('ede').value=w.de||'';document.getElementById('eex1').value=w.e1||'';document.getElementById('eex2').value=w.e2||'';document.getElementById('add-form').style.display='none';var ef=document.getElementById('edit-form');ef.style.display='block';ef.scrollIntoView({behavior:'smooth',block:'nearest'});document.getElementById('een').focus();}
+function saveEdit(){var en=document.getElementById('een').value.trim(),de=document.getElementById('ede').value.trim();if(!en||!de){alert('Felder ausfüllen.');return;}var l=gl(curId);if(!l||editWIdx<0)return;l.words[editWIdx]={en:en,de:de,e1:document.getElementById('eex1').value.trim(),e2:document.getElementById('eex2').value.trim()};sv();dirty=true;closeEdit();renderWords();}
+function closeEdit(){document.getElementById('edit-form').style.display='none';editWIdx=-1;}
+function delWord(idx){if(!confirm('Wort löschen?'))return;var l=gl(curId);if(!l)return;if(editWIdx===idx)closeEdit();l.words.splice(idx,1);if(l.hard)l.hard=l.hard.filter(function(i){return i!==idx;}).map(function(i){return i>idx?i-1:i;});if(l.weights){var nw={};Object.keys(l.weights).forEach(function(k){var ki=parseInt(k);if(ki<idx)nw[ki]=l.weights[k];else if(ki>idx)nw[ki-1]=l.weights[k];});l.weights=nw;}sv();dirty=true;updateRepeatBtn();renderWords();}
+function renderWords(){
+  var l=gl(curId);if(!l)return;
+  document.getElementById('view-h').textContent=l.name+' ('+l.words.length+'/'+l.max+')';
+  document.getElementById('view-version').textContent='v'+APP_VERSION;
+  var c=document.getElementById('words-out'),e=document.getElementById('words-empty');
+  if(!l.words.length){c.innerHTML='';e.style.display='block';return;}
+  e.style.display='none';
+  c.innerHTML=l.words.map(function(w,i){
+    var h=isH(l,i),wt=getW(l,i);
+    var wBadge=wt>0?'<span class="weight-badge '+wClass(wt)+'">'+wLabel(wt)+'</span>':'<span style="font-size:var(--fs-xs);color:var(--text3);margin-left:6px">⚡ 0</span>';
+    var wEditor='<div class="w-editor"><button class="w-btn" onclick="changeWeight(\''+l.id+'\','+i+',-1)">−</button><span class="w-val">'+wt+'</span><button class="w-btn" onclick="changeWeight(\''+l.id+'\','+i+',1)">+</button></div>';
+    return '<div class="wcard"><div class="fxb"><div style="flex:1;min-width:0"><div class="wen">'+esc(w.en)+(h?'<span class="hard-dot"></span>':'')+wBadge+'</div><div class="wde">'+esc(w.de)+'</div>'+(w.e1?'<div class="wex">'+esc(w.e1)+'</div>':'')+(w.e2?'<div class="wex">'+esc(w.e2)+'</div>':'')+wEditor+'</div><div class="fx" style="flex-shrink:0;margin-left:10px;gap:5px"><button class="btn btn-xs btn-blue" onclick="openEdit('+i+')">✏</button><button class="btn btn-xs btn-red" onclick="delWord('+i+')">✕</button></div></div>'+(wt>0?'<div class="weight-bar"><div class="weight-fill" style="width:'+Math.min(100,wt*5)+'%;background:'+wColor(wt)+'"></div></div>':'')+'</div>';
+  }).join('');
+}
+
+// ===== PRACTICE =====
+function renderHard(){var l=gl(curId),hw=(l&&l.hard)||[];['btn-lh','btn-qh'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display=hw.length?'':'none';});var tw=document.getElementById('hard-toggle-wrap');if(tw)tw.style.display=hw.length?'':'none';document.getElementById('hard-sec').style.display='none';hardOpen=false;var statsEl=document.getElementById('ps-stats');if(l&&l.words.length>0){var rw=l.words.filter(function(w,i){return getW(l,i)>=W_THRESHOLD;}).length;statsEl.style.display='grid';statsEl.innerHTML='<div class="stat-box"><div class="stat-num">'+l.words.length+'</div><div class="stat-lbl">Wörter</div></div><div class="stat-box"><div class="stat-num" style="color:var(--amber)">'+hw.length+'</div><div class="stat-lbl">Schwierig</div></div><div class="stat-box"><div class="stat-num" style="color:var(--red)">'+rw+'</div><div class="stat-lbl">Wiederholen</div></div>';}else{statsEl.style.display='none';}}
+function toggleHardSec(){hardOpen=!hardOpen;document.getElementById('hard-sec').style.display=hardOpen?'block':'none';if(hardOpen)renderChips();}
+function renderChips(){var l=gl(curId);if(!l)return;document.getElementById('hard-chips').innerHTML=(l.hard||[]).map(function(i){var w=l.words[i];if(!w)return'';return'<span class="chip">'+esc(w.en)+' – '+esc(w.de)+'<button onclick="removeHard('+i+')" title="Entfernen">✕</button></span>';}).join('');}
+function removeHard(wi){var l=gl(curId);if(!l)return;l.hard=l.hard.filter(function(i){return i!==wi;});sv();renderHard();if(hardOpen)renderChips();}
+function clearHard(){if(!confirm('Alle entfernen?'))return;var l=gl(curId);if(!l)return;l.hard=[];sv();renderHard();}
+function resetPS(){hardOpen=false;document.getElementById('hard-sec').style.display='none';['ps-setup','ps-learn','ps-quiz','ps-match','ps-mresult','ps-qresult'].forEach(function(id){document.getElementById(id).style.display='none';});document.getElementById('ps-setup').style.display='block';}
+function setLM(m){lMode=m;document.getElementById('lm-ende').classList.toggle('on',m==='en-de');document.getElementById('lm-deen').classList.toggle('on',m==='de-en');}
+function setQM(m){qMode=m;document.getElementById('qm-ende').classList.toggle('on',m==='en-de');document.getElementById('qm-deen').classList.toggle('on',m==='de-en');}
+function setRplMode(m){rplMode=m;document.getElementById('rpl-m-ende').classList.toggle('on',m==='en-de');document.getElementById('rpl-m-deen').classList.toggle('on',m==='de-en');}
+
+function startLearn(ho){var l=gl(curId);if(!l||!l.words.length){alert('Keine Wörter vorhanden.');return;}lTrans=document.getElementById('cb-trans').checked;lRand=document.getElementById('cb-rand').checked;var src;if(ho){var hw=l.hard||[];if(!hw.length){alert('Keine schwierigen Wörter.');return;}src=hw.map(function(i){return{w:l.words[i],i:i};}).filter(function(x){return x.w;});}else{src=l.words.map(function(w,i){return{w:w,i:i};});}lWords=lRand?shuf(src):src.slice();lIdx=0;document.getElementById('ps-setup').style.display='none';document.getElementById('ps-learn').style.display='block';showLCard();}
+function lNavBtns(){var last=lIdx>=lWords.length-1;document.getElementById('lnext').style.display=last?'none':'';document.getElementById('lrepeat').style.display=last?'':'none';document.getElementById('ldone').style.display=last?'':'none';document.getElementById('lprev').style.display=lIdx>0?'':'none';}
+function showLCard(){var it=lWords[lIdx],tot=lWords.length,w=it.w,wi=it.i,l=gl(curId);document.getElementById('lpbar').style.width=Math.round((lIdx+1)/tot*100)+'%';document.getElementById('lcount').textContent=(lIdx+1)+' / '+tot;var en=lMode==='en-de';document.getElementById('lbadge').textContent=en?'Englisch':'Deutsch';document.getElementById('lhard-ind').style.display=isH(l,wi)?'inline-block':'none';var wt=getW(l,wi);var wi2=document.getElementById('lweight-ind');if(wt>0){wi2.textContent=wLabel(wt);wi2.className='weight-badge '+wClass(wt);wi2.style.display='inline-flex';}else wi2.style.display='none';document.getElementById('lword').textContent=en?w.en:w.de;var tr=document.getElementById('ltrans'),pw=document.getElementById('lpeek-wrap'),ex=document.getElementById('lex');lPeekVis=false;tr.textContent=en?w.de:w.en;function bex(){if(w.e1||w.e2){ex.innerHTML='<div class="lex-lbl">Beispiele:</div>'+(w.e1?'<div class="lex-line">'+esc(w.e1)+'</div>':'')+(w.e2?'<div class="lex-line">'+esc(w.e2)+'</div>':'');ex.style.display='block';}else ex.style.display='none';}if(lTrans){tr.style.opacity='1';tr.style.display='block';pw.style.display='none';bex();}else{tr.style.opacity='0';tr.style.display='block';pw.style.display='block';document.getElementById('lpeek-btn').textContent='Übersetzung anzeigen';ex.style.display='none';}var mb=document.getElementById('mhard-btn');var h=isH(l,wi);mb.textContent=h?'★ Schwierig — entfernen':'☆ Als schwierig markieren';mb.className=h?'mark-hard-btn':'mark-hard-btn off';lNavBtns();}
+function lNext(){if(lIdx<lWords.length-1){lIdx++;showLCard();}}
+function lRepeat(){if(lRand)lWords=shuf(lWords);lIdx=0;showLCard();}
+function lDone(){document.getElementById('ps-learn').style.display='none';document.getElementById('ps-setup').style.display='block';renderHard();}
+function lPrev(){if(lIdx>0){lIdx--;showLCard();}}
+function abortLearn(){if(!confirm('Lernen abbrechen?'))return;resetPS();renderHard();}
+function toggleHard(){var it=lWords[lIdx],wi=it.i,l=gl(curId);if(!l)return;if(!l.hard)l.hard=[];var p=l.hard.indexOf(wi);if(p>=0)l.hard.splice(p,1);else l.hard.push(wi);sv();var h=isH(l,wi);var mb=document.getElementById('mhard-btn');mb.textContent=h?'★ Schwierig — entfernen':'☆ Als schwierig markieren';mb.className=h?'mark-hard-btn':'mark-hard-btn off';document.getElementById('lhard-ind').style.display=h?'inline-block':'none';}
+function peekTrans(){var w=lWords[lIdx].w,tr=document.getElementById('ltrans'),pb=document.getElementById('lpeek-btn'),ex=document.getElementById('lex');if(!lPeekVis){tr.style.opacity='1';pb.textContent='Übersetzung verbergen';if(w.e1||w.e2){ex.innerHTML='<div class="lex-lbl">Beispiele:</div>'+(w.e1?'<div class="lex-line">'+esc(w.e1)+'</div>':'')+(w.e2?'<div class="lex-line">'+esc(w.e2)+'</div>':'');ex.style.display='block';}lPeekVis=true;}else{tr.style.opacity='0';pb.textContent='Übersetzung anzeigen';ex.style.display='none';lPeekVis=false;}}
+
+// keyboard ← → for learn
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key==='Escape'){closeSettings();return;}
+  var learnVis=document.getElementById('ps-learn').style.display!=='none'&&document.getElementById('pg-practice').classList.contains('on');
+  var rplVis=document.getElementById('rp-learn-mode').style.display!=='none'&&document.getElementById('pg-repeat').classList.contains('on');
+  if(e.key==='ArrowRight'){
+    if(learnVis&&lIdx<lWords.length-1)lNext();
+    else if(rplVis&&rplIdx<rplQueue.length-1)rplNext();
+  }else if(e.key==='ArrowLeft'){
+    if(learnVis)lPrev();
+    else if(rplVis)rplPrev();
+  }
+});
+
+function startQuiz(ho){var l=gl(curId);if(!l||!l.words.length){alert('Keine Wörter vorhanden.');return;}var src;if(ho){var hw=l.hard||[];if(!hw.length){alert('Keine schwierigen Wörter.');return;}src=hw.map(function(i){return{w:l.words[i],i:i};}).filter(function(x){return x.w;});}else{src=l.words.map(function(w,i){return{w:w,i:i};});}qWords=shuf(src);qIdx=0;qScore=0;document.getElementById('ps-setup').style.display='none';document.getElementById('ps-quiz').style.display='block';showQ();}
+function abortQuiz(){if(!confirm('Abfragen abbrechen?'))return;resetPS();renderHard();}
+function showQ(){var it=qWords[qIdx],tot=qWords.length,w=it.w;document.getElementById('qpbar').style.width=Math.round(qIdx/tot*100)+'%';document.getElementById('qcount').textContent=(qIdx+1)+' / '+tot;document.getElementById('qhint').textContent=qMode==='en-de'?'Deutsche Übersetzung:':'Englisches Wort:';document.getElementById('qword').textContent=qMode==='en-de'?w.en:w.de;document.getElementById('qans').value='';document.getElementById('qfb').style.display='none';document.getElementById('qex').style.display='none';document.getElementById('qcheck').style.display='';document.getElementById('qnext').style.display='none';setTimeout(function(){document.getElementById('qans').focus();},50);}
+function checkAns(){var it=qWords[qIdx],w=it.w;var raw=document.getElementById('qans').value;var correct=qMode==='en-de'?w.de:w.en;var ok=checkAnswer(raw,correct);if(ok)qScore++;var l=gl(curId);if(l){if(ok)decayW(l,it.i);else addW(l,it.i,W_WRONG_QUIZ);sv();updateRepeatBtn();}var fb=document.getElementById('qfb');fb.style.display='block';fb.className='qfb '+(ok?'ok':'bad');if(ok){fb.textContent='✓ Richtig!';}else{var variants=correct.split('/').map(function(v){return v.trim();}).filter(Boolean);fb.textContent='✗ Falsch: '+variants.join(' / ');}if(w.e1||w.e2){document.getElementById('qex').style.display='block';document.getElementById('qex1').textContent=w.e1||'';document.getElementById('qex2').textContent=w.e2||'';}document.getElementById('qcheck').style.display='none';document.getElementById('qnext').style.display='';}
+function qNext(){qIdx++;if(qIdx>=qWords.length){document.getElementById('ps-quiz').style.display='none';document.getElementById('ps-qresult').style.display='block';var p=Math.round(qScore/qWords.length*100);document.getElementById('qr-score').textContent=qScore+' / '+qWords.length+' richtig';document.getElementById('qr-detail').textContent=p+'% korrekt';document.getElementById('qr-icon').textContent=p>=80?'🎉':p>=50?'👍':'📚';}else showQ();}
+
+function startMatch(){var l=gl(curId);if(!l||l.words.length<2){alert('Mindestens 2 Wörter benötigt.');return;}mN=parseInt(document.getElementById('match-n').value)||4;mN=Math.min(mN,l.words.length);mPool=shuf(l.words.map(function(w,i){return{w:w,i:i};}));mRound=0;mOk=0;mErr=0;mTotal=Math.ceil(mPool.length/mN);resetPS();document.getElementById('ps-setup').style.display='none';document.getElementById('ps-match').style.display='block';loadMRound();}
+function loadMRound(){var pairs=mPool.slice(mRound*mN,mRound*mN+mN);mEnI=shuf(pairs.map(function(it,i){return{t:it.w.en,p:i,li:it.i,matched:false,wrong:false};}));mDeI=shuf(pairs.map(function(it,i){var first=it.w.de.split('/')[0].trim();return{t:first,p:i,li:it.i,matched:false,wrong:false};}));mSelSide=null;mSelIdx=null;document.getElementById('mround').textContent='Runde '+(mRound+1)+' / '+mTotal;document.getElementById('mstatus').innerHTML='<span class="mscore-ok">✓ '+mOk+'</span><span class="mscore-bad"> ✗ '+mErr+'</span>';document.getElementById('mmsg').textContent='';renderMCols();}
+function renderMCols(){document.getElementById('mcol-en').innerHTML=mEnI.map(function(it,i){var cls='mitem'+(it.matched?' ok':it.wrong?' bad':(mSelSide==='en'&&mSelIdx===i?' sel':''));return'<div class="'+cls+'" onclick="mClick(\'en\','+i+')">'+esc(it.t)+'</div>';}).join('');document.getElementById('mcol-de').innerHTML=mDeI.map(function(it,i){var cls='mitem'+(it.matched?' ok':it.wrong?' bad':(mSelSide==='de'&&mSelIdx===i?' sel':''));return'<div class="'+cls+'" onclick="mClick(\'de\','+i+')">'+esc(it.t)+'</div>';}).join('');}
+function mClick(side,idx){var arr=side==='en'?mEnI:mDeI;var item=arr[idx];if(item.matched||item.wrong)return;if(mSelSide===side&&mSelIdx===idx){mSelSide=null;mSelIdx=null;renderMCols();return;}if(mSelSide===null){mSelSide=side;mSelIdx=idx;renderMCols();return;}if(mSelSide===side){mSelSide=side;mSelIdx=idx;renderMCols();return;}var enIdx=side==='de'?mSelIdx:idx,deIdx=side==='de'?idx:mSelIdx;var enItem=mEnI[enIdx],deItem=mDeI[deIdx];var l=gl(curId);if(enItem.p===deItem.p){enItem.matched=true;deItem.matched=true;mOk++;if(l){decayW(l,enItem.li,W_MATCH_OK);sv();updateRepeatBtn();}document.getElementById('mstatus').innerHTML='<span class="mscore-ok">✓ '+mOk+'</span><span class="mscore-bad"> ✗ '+mErr+'</span>';mSelSide=null;mSelIdx=null;renderMCols();var all=mEnI.every(function(x){return x.matched;});if(all)setTimeout(function(){mRound++;if(mRound>=mTotal)showMResult();else loadMRound();},400);}else{mErr++;if(l){addW(l,enItem.li,W_MATCH_BAD);sv();updateRepeatBtn();}document.getElementById('mstatus').innerHTML='<span class="mscore-ok">✓ '+mOk+'</span><span class="mscore-bad"> ✗ '+mErr+'</span>';document.getElementById('mmsg').textContent='Nicht korrekt — nochmal versuchen.';enItem.wrong=true;deItem.wrong=true;mSelSide=null;mSelIdx=null;renderMCols();setTimeout(function(){enItem.wrong=false;deItem.wrong=false;document.getElementById('mmsg').textContent='';renderMCols();},650);}}
+function showMResult(){document.getElementById('ps-match').style.display='none';document.getElementById('ps-mresult').style.display='block';var tot=mOk+mErr,p=tot>0?Math.round(mOk/tot*100):100;document.getElementById('mr-score').textContent=mOk+' richtig, '+mErr+' falsch';document.getElementById('mr-detail').textContent=p+'%';document.getElementById('mr-icon').textContent=p>=80?'🎉':p>=50?'👍':'📚';}
+function abortMatch(){if(!confirm('Zuordnung abbrechen?'))return;resetPS();renderHard();}
+
+function buildAllWeighted(){var all=[];lists.forEach(function(l){l.words.forEach(function(w,i){var wt=getW(l,i);if(wt>=W_THRESHOLD)all.push({w:w,listId:l.id,listName:l.name,wIdx:i,weight:wt});});});all.sort(function(a,b){return b.weight-a.weight;});return all;}
+function buildRounds(all){var r=[];for(var i=0;i<all.length;i+=ROUND_SIZE)r.push(all.slice(i,i+ROUND_SIZE));return r;}
+function openRepeat(){rpAllWords=buildAllWeighted();if(!rpAllWords.length){toast('Keine Wörter zum Wiederholen!','warn');return;}rpRounds=buildRounds(rpAllWords);rpCurrentRound=0;nav('repeat');showRepeatSetup();}
+function selectRpMode(m){rpMode=m;document.getElementById('rp-mode-learn').classList.toggle('on',m==='learn');document.getElementById('rp-mode-test').classList.toggle('on',m==='test');document.getElementById('rp-learn-opts').style.display=m==='learn'?'block':'none';updateRpRoundSub();}
+function updateRpRoundSub(){var cur=rpRounds[rpCurrentRound];if(cur)document.getElementById('rp-round-sub').textContent=cur.length+' Wörter · '+(rpMode==='learn'?'Lernen':'Prüfen');}
+function showRepeatSetup(){document.getElementById('rp-setup').style.display='block';document.getElementById('rp-learn-mode').style.display='none';document.getElementById('rp-test').style.display='none';document.getElementById('rp-result').style.display='none';document.getElementById('rp-learn-opts').style.display=rpMode==='learn'?'block':'none';var total=rpAllWords.length,rounds=rpRounds.length;document.getElementById('rp-setup-sub').textContent=total+' Wörter · '+rounds+' Runde'+(rounds>1?'n':'')+' à max. '+ROUND_SIZE;var cur=rpRounds[rpCurrentRound];document.getElementById('rp-round-title').textContent='Runde '+(rpCurrentRound+1)+' von '+rounds;updateRpRoundSub();document.getElementById('rp-start-btn').textContent='Runde '+(rpCurrentRound+1)+' starten';document.getElementById('rp-prev-btn').style.display=rpCurrentRound>0?'':'none';document.getElementById('rp-next-btn').style.display=rpCurrentRound<rounds-1?'':'none';renderRpWordList(cur);}
+function rpChangeRound(dir){rpCurrentRound=Math.max(0,Math.min(rpRounds.length-1,rpCurrentRound+dir));showRepeatSetup();}
+function renderRpWordList(items){var html='';items.forEach(function(it,rank){var wt=it.weight;html+='<div class="rp-word-row"><div class="fxb"><div class="fxc" style="flex:1;min-width:0;gap:10px"><span class="rp-rank">'+(rank+1)+'</span><div style="flex:1;min-width:0"><div class="wen" style="font-size:var(--fs-base)">'+esc(it.w.en)+'<span class="weight-badge '+wClass(wt)+'">'+wLabel(wt)+'</span></div><div class="wde" style="font-size:var(--fs-sm)">'+esc(it.w.de)+'</div><div style="font-size:var(--fs-xs);color:var(--text3);margin-top:2px">'+esc(it.listName)+'</div></div></div></div><div class="weight-bar" style="margin-top:6px"><div class="weight-fill" style="width:'+Math.min(100,wt*5)+'%;background:'+wColor(wt)+'"></div></div></div>';});document.getElementById('rp-word-list').innerHTML=html;}
+function beginRepeat(){rplMode=document.getElementById('rpl-m-ende').classList.contains('on')?'en-de':'de-en';rplTrans=document.getElementById('rpl-cb-trans').checked;rplRand=document.getElementById('rpl-cb-rand').checked;var cur=rpRounds[rpCurrentRound].slice();if(rpMode==='learn'){rplQueue=rplRand?shuf(cur):cur;rplIdx=0;rplPeekVis=false;document.getElementById('rp-setup').style.display='none';document.getElementById('rp-learn-mode').style.display='block';showRplCard();}else{rpQueue=cur;rpIdx=0;rpOk=0;rpFail=0;document.getElementById('rp-setup').style.display='none';document.getElementById('rp-test').style.display='block';showRpTestCard();}}
+function showRplCard(){if(rplIdx>=rplQueue.length){rplDone();return;}var it=rplQueue[rplIdx],tot=rplQueue.length,w=it.w;document.getElementById('rpl-pbar').style.width=Math.round(rplIdx/tot*100)+'%';document.getElementById('rpl-count').textContent=(rplIdx+1)+' / '+tot;document.getElementById('rpl-list-badge').textContent=it.listName;var wi=document.getElementById('rpl-weight-ind');wi.textContent=wLabel(it.weight);wi.className='weight-badge '+wClass(it.weight);var en=rplMode==='en-de';document.getElementById('rpl-badge').textContent=en?'Englisch':'Deutsch';document.getElementById('rpl-word').textContent=en?w.en:w.de;var tr=document.getElementById('rpl-trans'),pw=document.getElementById('rpl-peek-wrap'),ex=document.getElementById('rpl-ex');rplPeekVis=false;tr.textContent=en?w.de:w.en;ex.style.display='none';ex.innerHTML='';function bex(){if(w.e1||w.e2){ex.innerHTML='<div class="lex-lbl">Beispiele:</div>'+(w.e1?'<div class="lex-line">'+esc(w.e1)+'</div>':'')+(w.e2?'<div class="lex-line">'+esc(w.e2)+'</div>':'');ex.style.display='block';}else ex.style.display='none';}if(rplTrans){tr.style.opacity='1';tr.style.display='block';pw.style.display='none';bex();}else{tr.style.opacity='0';tr.style.display='block';pw.style.display='block';document.getElementById('rpl-peek-btn').textContent='Übersetzung anzeigen';}var isLast=rplIdx>=rplQueue.length-1;document.getElementById('rpl-next-btn').style.display=isLast?'none':'';document.getElementById('rpl-repeat-btn').style.display=isLast?'':'none';document.getElementById('rpl-done-btn').style.display=isLast?'':'none';document.getElementById('rpl-prev-btn').style.display=rplIdx>0?'':'none';}
+function rplPeekToggle(){var w=rplQueue[rplIdx].w,tr=document.getElementById('rpl-trans'),pb=document.getElementById('rpl-peek-btn'),ex=document.getElementById('rpl-ex');if(!rplPeekVis){tr.style.opacity='1';pb.textContent='Übersetzung verbergen';if(w.e1||w.e2){ex.innerHTML='<div class="lex-lbl">Beispiele:</div>'+(w.e1?'<div class="lex-line">'+esc(w.e1)+'</div>':'')+(w.e2?'<div class="lex-line">'+esc(w.e2)+'</div>':'');ex.style.display='block';}rplPeekVis=true;}else{tr.style.opacity='0';pb.textContent='Übersetzung anzeigen';ex.style.display='none';rplPeekVis=false;}}
+function rplNext(){rplIdx++;showRplCard();}
+function rplPrev(){if(rplIdx>0){rplIdx--;showRplCard();}}
+function rplRepeat(){rplQueue=shuf(rplQueue);rplIdx=0;showRplCard();}
+function rplDone(){document.getElementById('rp-learn-mode').style.display='none';document.getElementById('rp-result').style.display='block';document.getElementById('rp-result-icon').textContent='📖';document.getElementById('rp-result-title').textContent='Lernen abgeschlossen!';document.getElementById('rp-score').textContent=rplQueue.length+' Wörter durchgegangen';document.getElementById('rp-detail').textContent=countWeighted()+' Wörter verbleiben zur Wiederholung';}
+function showRpTestCard(){if(rpIdx>=rpQueue.length){rpFinish();return;}var it=rpQueue[rpIdx],tot=rpQueue.length,w=it.w;document.getElementById('rp-pbar').style.width=Math.round(rpIdx/tot*100)+'%';document.getElementById('rp-count').textContent=(rpIdx+1)+' / '+tot;document.getElementById('rp-list-badge').textContent=it.listName;var wi=document.getElementById('rp-weight-ind');wi.textContent=wLabel(it.weight);wi.className='weight-badge '+wClass(it.weight);document.getElementById('rp-word').textContent=w.en;document.getElementById('rp-ans').value='';document.getElementById('rp-fb').style.display='none';document.getElementById('rp-ex').style.display='none';document.getElementById('rp-check-btn').style.display='';document.getElementById('rp-next-word-btn').style.display='none';document.getElementById('rp-finish-btn').style.display='none';setTimeout(function(){document.getElementById('rp-ans').focus();},50);}
+function rpCheck(){var it=rpQueue[rpIdx],w=it.w;var raw=document.getElementById('rp-ans').value;var ok=checkAnswer(raw,w.de);var l=gl(it.listId);if(l){if(ok){decayW(l,it.wIdx);rpOk++;}else rpFail++;sv();updateRepeatBtn();}var fb=document.getElementById('rp-fb');fb.style.display='block';fb.className='qfb '+(ok?'ok':'bad');if(ok){fb.textContent='✓ Richtig!';}else{var variants=w.de.split('/').map(function(v){return v.trim();}).filter(Boolean);fb.textContent='✗ Falsch: '+variants.join(' / ');}if(w.e1||w.e2){document.getElementById('rp-ex').style.display='block';document.getElementById('rp-ex1').textContent=w.e1||'';document.getElementById('rp-ex2').textContent=w.e2||'';}document.getElementById('rp-check-btn').style.display='none';var isLast=rpIdx>=rpQueue.length-1;document.getElementById('rp-next-word-btn').style.display=isLast?'none':'';document.getElementById('rp-finish-btn').style.display=isLast?'':'none';}
+function rpNextWord(){rpIdx++;showRpTestCard();}
+function rpFinish(){sv();updateRepeatBtn();document.getElementById('rp-test').style.display='none';document.getElementById('rp-result').style.display='block';var total=rpOk+rpFail,pct=total>0?Math.round(rpOk/total*100):100;document.getElementById('rp-result-icon').textContent='🎯';document.getElementById('rp-result-title').textContent='Prüfen abgeschlossen!';document.getElementById('rp-score').textContent=rpOk+' / '+total+' richtig';document.getElementById('rp-detail').textContent=pct+'% korrekt · '+countWeighted()+' Wörter verbleiben';}
+function abortRepeat(){if(!confirm('Wiederholung abbrechen?'))return;sv();updateRepeatBtn();nav('lists');}
+
+window.addEventListener('beforeunload',function(){if(lists.length)exportAll(1);});
+ld();ldS();renderLists();updateRepeatBtn();
+document.getElementById('modal-version').textContent=APP_VERSION;
+</script>
